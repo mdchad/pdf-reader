@@ -121,8 +121,8 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-        <div className="flex-1 space-y-4 p-8 pt-6">
-          <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex-1 space-y-4 p-8 pt-12">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="picture">Picture</Label>
               <Input

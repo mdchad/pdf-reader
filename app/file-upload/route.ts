@@ -10,7 +10,6 @@ export async function POST(req: NextRequest) {
 
   // Get file from formData
   const file = formData.get('file');
-  console.log(file)
 
   if (file instanceof Blob) {
     // Convert file to stream
