@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import readDoc from "@/lib/readDoc";
+import {run} from "@/lib/github";
 
 export async function POST(req: NextRequest) {
   // const pages = (await req.json())
@@ -11,22 +12,24 @@ export async function POST(req: NextRequest) {
   // Get file from formData
   const file = formData.get('file');
 
-  if (file instanceof Blob) {
-    // Convert file to stream
-    const a = await readDoc(file)
-    console.log('================')
-    console.log(a)
-    console.log('================')
+  // const runGithub = run()
 
-    // const stream = file.stream();
-    //
-    // // Convert stream to buffer
-    // const chunks = [];
-    // for await (const chunk of stream) {
-    //   chunks.push(chunk);
-    // }
-    // const buffer = Buffer.concat(chunks);
-  }
+  // if (file instanceof Blob) {
+  //   // Convert file to stream
+  //   const a = await readDoc(file)
+  //   console.log('================')
+  //   console.log(a)
+  //   console.log('================')
+  //
+  //   // const stream = file.stream();
+  //   //
+  //   // // Convert stream to buffer
+  //   // const chunks = [];
+  //   // for await (const chunk of stream) {
+  //   //   chunks.push(chunk);
+  //   // }
+  //   // const buffer = Buffer.concat(chunks);
+  // }
   return NextResponse.json({
     success: false,
     message: "At least one PDF page required",
