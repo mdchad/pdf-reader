@@ -18,16 +18,16 @@ export function MainNav({
         Overview
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/dashboard/hadith"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Customers
+        Hadith
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/dashboard/muslim"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Products
+        Muslim
       </Link>
       <Link
         href="/examples/dashboard"

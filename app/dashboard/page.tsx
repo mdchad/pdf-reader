@@ -70,6 +70,7 @@ export default function DashboardPage() {
     console.log(data.file)
     console.log(data.file[0])
     formData.append("file", data.file[0]);
+    formData.append("fileName", data.fileName)
     console.log(...formData)
 
     try {
@@ -129,6 +130,14 @@ export default function DashboardPage() {
                 id="picture"
                 type="file"
                 {...register("file")}
+              />
+            </div>
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="name">File-name</Label>
+              <Input
+                id="name"
+                type="text"
+                {...register("fileName")}
               />
             </div>
             <Button type="submit">Submit</Button>

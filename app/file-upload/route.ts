@@ -3,6 +3,7 @@ import readDoc from "@/lib/readDoc";
 import {run} from "@/lib/github";
 
 export async function POST(req: NextRequest) {
+  console.log('request comingggg')
   // const pages = (await req.json())
   // const file = req.file.buffer;
   // console.log('helllooooo')
@@ -11,12 +12,13 @@ export async function POST(req: NextRequest) {
 
   // Get file from formData
   const file = formData.get('file');
+  const fileName = formData.get('fileName');
 
   // const runGithub = run()
 
   // if (file instanceof Blob) {
   //   // Convert file to stream
-  //   const a = await readDoc(file)
+    const a = await readDoc(file, fileName)
   //   console.log('================')
   //   console.log(a)
   //   console.log('================')
