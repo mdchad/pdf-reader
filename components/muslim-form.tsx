@@ -1,18 +1,6 @@
 "use client"
 
-import Link from "next/link"
-
-import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form"
 import { Input } from "./ui/input"
 import {
   Select,
@@ -30,7 +18,6 @@ import {useToast} from "@/components/ui/use-toast";
 
 // This can come from your database or API.
 const defaultValue = {
-  id: uuidv4(),
   footnotes: [],
   number: "",
   content: {
@@ -40,10 +27,15 @@ const defaultValue = {
   },
   chapter_id: "",
   chapter_name: "",
+  chapter_metadata: "",
   chapter_title: {
     en: "",
     ms: "",
     ar: "ِ"
+  },
+  chapter_transliteration: {
+    en: "",
+    ms: "",
   },
   volume_id: "",
   volume_name: "",
@@ -70,49 +62,25 @@ const defaultVolume = {
       ar: ""
     },
     transliteration: {
-      "en": "",
-      "ms": ""
+      en: "",
+      ms: ""
     },
     book_name: "sahih_muslim",
     book_title: "Sahih Muslim",
     book_id: "240360e4-50b4-47a9-9506-9850b0e3bfd7"
 }
 
-export function MuslimForm() {
+export function MuslimForm({ data }) {
+  console.log(data)
   const { toast } = useToast()
 
-  const [value, setValue] = useState(defaultValue)
-  const [volume, setVolume] = useState([])
-  const [newVolume, setNewVolume] = useState(defaultVolume)
-  const [toggle, setToggle] = useState(false)
-
-  useEffect(() => {
-    (async function fetchVolume() {
-      try {
-        const response = await fetch('/get-muslim-volume', {
-          method: 'GET'
-        });
-
-        if (response.ok) {
-          const { data } = await response.json()
-          setVolume(data)
-          console.log('Get successfully');
-          // Handle success
-        } else {
-          console.error('Error with file');
-          // Handle error
-        }
-      } catch (error) {
-        console.error('Error file:', error);
-        // Handle error
-      }
-    })()
-  }, [])
+  const [value, setValue] = useState(data ? data : defaultValue)
+  const [newVolume, setNewVolume] = useState( defaultVolume)
 
   async function onSubmit(e) {
     e.preventDefault()
     try {
-      const response = await fetch('/add-muslim', {
+      const response = await fetch('/muslim-api', {
         method: 'POST',
         body: JSON.stringify(value)
       });
@@ -121,7 +89,6 @@ export function MuslimForm() {
         console.log('Add successfully');
         // Handle success
         setValue(defaultValue)
-        setToggle(false)
         setNewVolume(defaultVolume)
       } else {
         console.error('Error with file');
@@ -135,21 +102,42 @@ export function MuslimForm() {
       title: "You submitted the following values:",
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">Yesss</code>
+          {value && <code className="text-white">{JSON.stringify(value, null, 2)}</code> }
         </pre>
       ),
     })
   }
 
-  function onSelectChange(selectedVol) {
-    const getVolume = volume.find(vol => selectedVol === vol.title.ms)
-
-    setValue({ ...value, volume_id: getVolume.id, volume_title: { ...value.volume_title, ms: getVolume.title.ms, ar: getVolume.title.ar }})
-  }
-
-  function submitNewVolume(e) {
+  async function submitNewVolume(e) {
     e.preventDefault()
     setValue({ ...value, volume_id: newVolume.id, volume_title: { ...value.volume_title, ms: newVolume.title.ms, ar: newVolume.title.ar } })
+
+    try {
+      const response = await fetch('/volume-muslim', {
+        method: 'POST',
+        body: JSON.stringify(newVolume)
+      });
+
+      if (response.ok) {
+        toast({
+          title: "You submitted the following values:",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              {newVolume && <code className="text-white">{JSON.stringify(newVolume, null, 2)}</code> }
+            </pre>
+          ),
+        })
+        console.log('Add successfully');
+        // Handle success
+        setNewVolume(defaultVolume)
+      } else {
+        console.error('Error with file');
+        // Handle error
+      }
+    } catch (error) {
+      console.error('Error file:', error);
+      // Handle error
+    }
   }
 
   return (
@@ -157,8 +145,8 @@ export function MuslimForm() {
       <div>
         <form onSubmit={onSubmit} className="space-y-8">
           <div>
-            <Label htmlFor="picture">id</Label>
-            <Input placeholder="" disabled value={value.id}/>
+            <Label htmlFor="ar">Number</Label>
+            <Input value={value.number} onChange={(e) => setValue({ ...value, number: e.target.value })}/>
           </div>
           <div>
             <Label htmlFor="ar">Arabic</Label>
@@ -170,40 +158,55 @@ export function MuslimForm() {
           </div>
 
           {/*setValue({ ...value, volume_id: selectedVol.id, volume_title: { ...value.volume_title, ms: selectedVol.title.ms, ar: selectedVol.title.ar }})*/}
-          <Select onValueChange={(selectedVol) => onSelectChange(selectedVol)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Volume" />
-            </SelectTrigger>
-            <SelectContent>
-              {volume.length && volume.map((vol, i) => {
-                return (
-                  <SelectItem key={vol.id} value={vol.title.ms}>{vol.title.ms}</SelectItem>
-                )
-              })}
-            </SelectContent>
-          </Select>
+          {/*<Select onValueChange={(selectedVol) => onSelectChange(selectedVol)}>*/}
+          {/*  <SelectTrigger className="w-[180px]">*/}
+          {/*    <SelectValue placeholder="Volume" />*/}
+          {/*  </SelectTrigger>*/}
+          {/*  <SelectContent>*/}
+          {/*    {volume?.length && volume.map((vol, i) => {*/}
+          {/*      return (*/}
+          {/*        <SelectItem key={vol.id} value={vol.title.ms}>{vol.title.ms}</SelectItem>*/}
+          {/*      )*/}
+          {/*    })}*/}
+          {/*  </SelectContent>*/}
+          {/*</Select>*/}
 
-          <div className="flex items-center space-x-4">
-            <p className="text-sm">Volume not found? Click here to add</p>
-            <Button size={"sm"} variant={"outline"} onClick={() => setToggle(true)}><p>+</p></Button>
+          {/*<div className="flex items-center space-x-4">*/}
+          {/*  <p className="text-xs">Volume not found? Click here to add</p>*/}
+          {/*  <Button size={"sm"} variant={"outline"} onClick={(e) => {*/}
+          {/*    e.preventDefault()*/}
+          {/*    setToggle(true)}}>*/}
+          {/*    <p>+</p>*/}
+          {/*  </Button>*/}
+          {/*</div>*/}
+
+          <div className="space-y-4">
+            <Label>Chapter</Label>
+            <p className="text-slate-500 text-xs">Chapter here will get the previously entered volume</p>
+            <Input value={value.chapter_title.ms} placeholder="Malay" onChange={(e) => setValue({ ...value, chapter_title: { ...value.chapter_title, ms: e.target.value } }) }/>
+            <Input value={value.chapter_title.ar} placeholder="Arabic" onChange={(e) => setValue({ ...value, chapter_title: { ...value.chapter_title, ar: e.target.value } }) }/>
+            <Input value={value.chapter_transliteration.ms} placeholder="Transliteration" onChange={(e) => setValue({ ...value, chapter_transliteration: { ...value.chapter_transliteration, ms: e.target.value } }) }/>
+            <Textarea value={value.chapter_metadata} placeholder="Metadata" onChange={(e) => setValue({ ...value, chapter_metadata: e.target.value }) }/>
           </div>
 
-          { toggle && (
-            <div className="space-y-4">
-              <Label>Volume</Label>
-              <Input placeholder="Malay" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ms: e.target.value }})}/>
-              <Input placeholder="Arabic" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ar: e.target.value }})}/>
-              <Input placeholder="Transliteration" onChange={(e) => setNewVolume({ ...newVolume, transliteration: { ...newVolume.transliteration, ms: e.target.value }})}/>
-              <Button onClick={submitNewVolume}>Add volume</Button>
-            </div>
-          )}
-
+          <div className="space-y-4">
+            <Label>Volume</Label>
+            <p className="text-slate-500 text-xs">Volume here will get the previously entered volume</p>
+            <Input placeholder="Malay" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ms: e.target.value }})}/>
+            <Input placeholder="Arabic" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ar: e.target.value }})}/>
+            <Input placeholder="Transliteration" onChange={(e) => setNewVolume({ ...newVolume, transliteration: { ...newVolume.transliteration, ms: e.target.value }})}/>
+            <Textarea placeholder="Metadata" onChange={(e) => setNewVolume({ ...newVolume, metadata: e.target.value })}/>
+            <Button className="" size={'sm'} variant={'outline'} onClick={submitNewVolume}>Add volume</Button>
+          </div>
 
           <Button type="submit">Submit</Button>
         </form>
       </div>
       <div className="bg-slate-100 rounded-md p-4 overflow-scroll">
-        <pre>{JSON.stringify(value, null , 2)}</pre>
+        {/*{value && <pre>{JSON.stringify(value, null , 2)}</pre> }*/}
+        <pre className="mt-2 rounded-md bg-slate-950 p-4">
+          {value && <code className="text-white">{JSON.stringify(value, null, 2)}</code> }
+        </pre>
       </div>
     </div>
   )
