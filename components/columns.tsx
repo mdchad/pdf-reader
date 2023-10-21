@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
@@ -47,7 +49,7 @@ export const columns: ColumnDef<Task>[] = [
 			<DataTableColumnHeader column={column} title="Content" />
 		),
 		cell: ({ row }) => {
-			const label = labels.find((label) => label.value === row.original.label);
+			const label = labels.find((label: any) => label.value === row.original.label);
 
 			return (
 				<div className="flex space-x-2">

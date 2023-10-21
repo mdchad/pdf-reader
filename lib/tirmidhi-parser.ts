@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {v4 as uuidv4} from "uuid";
 
 const arabicNumbers  = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g]

@@ -7,7 +7,6 @@ import path from "path";
 
 export async function POST(req: NextRequest) {
   const res = await req.json();
-  console.log('res', res)
 
   const data = await fs.readFile(
     path.join(process.cwd(), "data-source/nasai.json")
@@ -16,10 +15,10 @@ export async function POST(req: NextRequest) {
   const task = JSON.parse(data.toString())
 
   let updateRange = false;
-  let body
-  const mergedObj = task.map((item, index) => {
+  let body: any
+  const mergedObj = task.map((item: any) => {
     if (!updateRange) {
-      body = res.find(r => {
+      body = res.find((r: any) => {
         return parseInt(r.range.start) === parseInt(item.number)
       })
     }

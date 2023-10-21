@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { DocxLoader } from "langchain/document_loaders/fs/docx";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { writeFile } from 'node:fs';
@@ -22,6 +24,19 @@ import tirmidhiParser from "@/lib/tirmidhi-parser";
 import abiDawudParser from "@/lib/abiDawud-parser";
 import ibnmajahParser from "@/lib/ibnmajah-parser";
 import nasai from "@/lib/nasai";
+
+function findMissingNumbersForChapter(numbers, totalRange) {
+  const set = new Set(numbers);
+  const missingNumbers = [];
+
+  for (let i = 1; i <= totalRange; i++) {
+    if (!set.has(i)) {
+      missingNumbers.push(i);
+    }
+  }
+
+  return missingNumbers;
+}
 
 export default async function readDoc(blob, fileName) {
   try {
@@ -137,6 +152,7 @@ export default async function readDoc(blob, fileName) {
     // });
     //
     //
+
     for (const doc of docs) {
       const text = doc.pageContent
     //   // console.log(doc)
@@ -161,19 +177,6 @@ export default async function readDoc(blob, fileName) {
       const mergedObjects = await nasai(text, chapters)
 
       const allNumbers = chapters.flatMap((chapter) => Array.from(chapter.numbers));
-
-      function findMissingNumbersForChapter(numbers, totalRange) {
-        const set = new Set(numbers);
-        const missingNumbers = [];
-
-        for (let i = 1; i <= totalRange; i++) {
-          if (!set.has(i)) {
-            missingNumbers.push(i);
-          }
-        }
-
-        return missingNumbers;
-      }
 
       const missingNumbers = findMissingNumbersForChapter(allNumbers, 1664);
       console.log(missingNumbers)

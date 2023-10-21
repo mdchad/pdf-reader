@@ -26,7 +26,7 @@ async function getTasks() {
   return { dataTable: z.array(hadithSchema).parse(tasks), tasks }
 }
 
-function findMissingNumber(sortedArray) {
+function findMissingNumber(sortedArray: any) {
   const missingNumbers = [];
   const corruptedNumbers = [];
   const arrayLength = sortedArray.length;
@@ -59,7 +59,7 @@ function findMissingNumber(sortedArray) {
   return [missingNumbers, corruptedNumbers];
 }
 
-function getFiles(dir, files = []) {
+function getFiles(dir: any, files = []) {
   // Get an array of all files and directories in the passed directory using fs.readdirSync
   const fileList = fs.readdirSync(dir);
   // Create the full path of the file/directory by concatenating the passed directory and file/directory name
@@ -104,7 +104,7 @@ export default async function TaskPage() {
             <UserNav />
           </div>
         </div>
-        <DataTable data={dataTable} dataList={fileList} corruptedNumbers={corruptedNumbers.join(', ')} missingData={missingNumbers.join(', ')} columns={columns} />
+        {/*<DataTable data={dataTable as any} dataList={fileList} corruptedNumbers={corruptedNumbers.join(', ')} missingData={missingNumbers.join(', ')} columns={columns} />*/}
       </div>
     </>
   )

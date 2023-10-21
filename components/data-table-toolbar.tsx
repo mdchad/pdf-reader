@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import { Table } from '@tanstack/react-table';
@@ -6,7 +7,6 @@ import {PlusCircle, X} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from '@/components/data-table-view-options';
-
 import { priorities, statuses } from '@/data/data';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import * as React from "react";

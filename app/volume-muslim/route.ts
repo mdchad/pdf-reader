@@ -3,9 +3,9 @@ import {promises as fs} from "fs";
 import path from "path";
 import connectToDatabase from "@/lib/mongodb";
 
-const db = await connectToDatabase();
 
 export async function GET() {
+  const db = await connectToDatabase();
   const cursor = await db
     .collection('muslim-volume')
     .find()
@@ -21,7 +21,8 @@ export async function GET() {
   })
 }
 
-export async function POST(req) {
+export async function POST(req: Request) {
+  const db = await connectToDatabase();
   const res = await req.json();
 
   const data = await db.collection('muslim-volume').insertOne(res);

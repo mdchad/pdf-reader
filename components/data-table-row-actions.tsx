@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use client';
 
 import { Row } from '@tanstack/react-table';

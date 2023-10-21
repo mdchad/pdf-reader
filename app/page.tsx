@@ -64,14 +64,13 @@ export default function DashboardPage() {
   //   }
   // };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     const formData = new FormData();
     console.log(data)
     console.log(data.file)
     console.log(data.file[0])
     formData.append("file", data.file[0]);
     formData.append("fileName", data.fileName)
-    console.log(...formData)
 
     try {
       const response = await fetch('/file-upload', {

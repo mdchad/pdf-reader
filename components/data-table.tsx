@@ -35,6 +35,7 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 	missingData: any;
 	corruptedNumbers: any;
+	dataList: any;
 }
 
 export function DataTable<TData, TValue>({

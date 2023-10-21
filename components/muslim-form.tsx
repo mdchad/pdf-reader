@@ -31,7 +31,7 @@ const defaultValue = {
   chapter_title: {
     en: "",
     ms: "",
-    ar: "ِ"
+    ar: ""
   },
   chapter_transliteration: {
     en: "",
@@ -65,19 +65,20 @@ const defaultVolume = {
       en: "",
       ms: ""
     },
+    metadata: "",
     book_name: "sahih_muslim",
     book_title: "Sahih Muslim",
     book_id: "240360e4-50b4-47a9-9506-9850b0e3bfd7"
 }
 
-export function MuslimForm({ data }) {
-  console.log(data)
+export function MuslimForm({ data } : { data?: any }) {
   const { toast } = useToast()
 
   const [value, setValue] = useState(data ? data : defaultValue)
   const [newVolume, setNewVolume] = useState( defaultVolume)
+  const [toggle, setToggle] = useState(false)
 
-  async function onSubmit(e) {
+  async function onSubmit(e: any) {
     e.preventDefault()
     try {
       const response = await fetch('/muslim-api', {
@@ -88,7 +89,7 @@ export function MuslimForm({ data }) {
       if (response.ok) {
         console.log('Add successfully');
         // Handle success
-        setValue(defaultValue)
+        setValue({ ...defaultValue, volume_id: newVolume.id, volume_title: { en: newVolume.title.en , ms: newVolume.title.ms, ar: newVolume.title.ar }})
         setNewVolume(defaultVolume)
       } else {
         console.error('Error with file');
@@ -108,7 +109,7 @@ export function MuslimForm({ data }) {
     })
   }
 
-  async function submitNewVolume(e) {
+  async function submitNewVolume(e: any) {
     e.preventDefault()
     setValue({ ...value, volume_id: newVolume.id, volume_title: { ...value.volume_title, ms: newVolume.title.ms, ar: newVolume.title.ar } })
 
@@ -156,6 +157,8 @@ export function MuslimForm({ data }) {
             <Label htmlFor="ms">Malay</Label>
             <Textarea value={value.content.ms} onChange={(e) => setValue({ ...value, content: { ...value.content, ms: e.target.value } })}/>
           </div>
+
+          <Button onClick={() => setToggle(true)} size={'sm'}>+ Add hadith</Button>
 
           {/*setValue({ ...value, volume_id: selectedVol.id, volume_title: { ...value.volume_title, ms: selectedVol.title.ms, ar: selectedVol.title.ar }})*/}
           {/*<Select onValueChange={(selectedVol) => onSelectChange(selectedVol)}>*/}

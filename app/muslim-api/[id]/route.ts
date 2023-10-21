@@ -5,7 +5,7 @@ import connectToDatabase from '@/lib/mongodb';
 import {ObjectId} from "mongodb";
 import {useParams} from "next/navigation";
 
-export async function GET(req: Request, { params }) {
+export async function GET(req: Request, { params } : { params: any}) {
   const db = await connectToDatabase();
   const number = params.id
 
