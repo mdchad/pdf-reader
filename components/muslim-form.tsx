@@ -152,7 +152,7 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
   const addNewHadith = (e: any) => {
     e.preventDefault()
     // Append a new content object to the content array
-    setValue(prevValue => ({
+    setValue((prevValue: any) => ({
       ...prevValue,
       content: [...prevValue.content, { en: "", ms: "", ar: "" }]
     }));
@@ -167,25 +167,25 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
             <Input value={value.number} onChange={(e) => setValue({ ...value, number: e.target.value })}/>
           </div>
           {
-            value.content.map((contentItem, index) => (
+            value.content.map((contentItem: any, index: any) => (
               <div key={index} className="space-y-8">
                 <div>
                   <Label htmlFor="ar">Arabic</Label>
                   <Textarea value={value.content[index].ar}
-                            onChange={(e) => {
+                            onChange={(e: any) => {
                               const updatedContent = [...value.content];
                               updatedContent[index].ar = e.target.value;
-                              setValue(prevValue => ({ ...prevValue, content: updatedContent }));
+                              setValue((prevValue: any) => ({ ...prevValue, content: updatedContent }));
                             }}
                   />
                 </div>
                 <div>
                   <Label htmlFor="ms">Malay</Label>
                   <Textarea value={value.content[index].ms}
-                            onChange={(e) => {
+                            onChange={(e: any) => {
                               const updatedContent = [...value.content];
                               updatedContent[index].ms = e.target.value;
-                              setValue(prevValue => ({ ...prevValue, content: updatedContent }));
+                              setValue((prevValue: any) => ({ ...prevValue, content: updatedContent }));
                             }}
                   />
                 </div>
@@ -193,7 +193,7 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
               </div>
           ))}
 
-          <Button onClick={(e) => addNewHadith(e)} size={'sm'}>+ Add hadith</Button>
+          <Button onClick={(e: any) => addNewHadith(e)} size={'sm'}>+ Add hadith</Button>
 
           {/*setValue({ ...value, volume_id: selectedVol.id, volume_title: { ...value.volume_title, ms: selectedVol.title.ms, ar: selectedVol.title.ar }})*/}
           {/*<Select onValueChange={(selectedVol) => onSelectChange(selectedVol)}>*/}
