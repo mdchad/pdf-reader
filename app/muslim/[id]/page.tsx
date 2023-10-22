@@ -8,6 +8,7 @@ import {useParams} from "next/navigation";
 
 export default function MuslimScreen() {
   const [fetchData, setFetchData] = useState()
+  const [volumeData, setVolumeData] = useState()
   const params = useParams()
   const id = params.id
 
@@ -18,8 +19,17 @@ export default function MuslimScreen() {
       });
 
       const { data } = await res.json()
+      console.log(data.volume_id)
+      //
+      const response = await fetch(`/volume-muslim/${data.volume_id}`, {
+        method: 'GET',
+      });
+
+      const { data: volumeData } = await response.json()
+
 
       setFetchData(data)
+      setVolumeData(volumeData)
     })()
   }, [])
 
@@ -44,16 +54,16 @@ export default function MuslimScreen() {
       <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
         <div className="flex items-center justify-between space-y-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Edit Hadith</h2>
             <p className="text-muted-foreground">
-              Here&apos;s a list of your tasks for this month!
+              Edit an existing hadith
             </p>
           </div>
           <div className="flex items-center space-x-2">
             <UserNav />
           </div>
         </div>
-        { fetchData && <MuslimForm data={fetchData}/> }
+        { fetchData && volumeData && <MuslimForm data={fetchData} volumeData={volumeData} edit={true}/> }
       </div>
     </>
   )

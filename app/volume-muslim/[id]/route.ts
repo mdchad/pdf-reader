@@ -7,23 +7,10 @@ import {useParams} from "next/navigation";
 
 export async function GET(req: Request, { params } : { params: any}) {
   const db = await connectToDatabase();
-  const number = params.id
+  const id = params.id
 
-  const data = await db.collection('muslim').findOne({ number });
-
-  return NextResponse.json({
-    success: true,
-    data,
-  })
-}
-
-export async function PUT(req: Request, { params } : { params: any}) {
-  const db = await connectToDatabase();
-  const number = params.id
-
-  const res = await req.json();
-
-  const data = await db.collection('muslim').updateOne({ number }, { $set: res });
+  const data = await db.collection('muslim-volume').findOne({ id });
+  console.log(data)
 
   return NextResponse.json({
     success: true,

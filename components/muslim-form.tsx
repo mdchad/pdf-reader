@@ -20,11 +20,11 @@ import {useToast} from "@/components/ui/use-toast";
 const defaultValue = {
   footnotes: [],
   number: "",
-  content: {
+  content: [{
     en: "",
     ms: "",
     ar: ""
-  },
+  }],
   chapter_id: "",
   chapter_name: "",
   chapter_metadata: "",
@@ -71,26 +71,35 @@ const defaultVolume = {
     book_id: "240360e4-50b4-47a9-9506-9850b0e3bfd7"
 }
 
-export function MuslimForm({ data } : { data?: any }) {
+export function MuslimForm({ data, volumeData, edit = false } : { data?: any, volumeData?: any, edit?: boolean }) {
   const { toast } = useToast()
 
   const [value, setValue] = useState(data ? data : defaultValue)
-  const [newVolume, setNewVolume] = useState( defaultVolume)
-  const [toggle, setToggle] = useState(false)
+  const [newVolume, setNewVolume] = useState( volumeData ? volumeData : defaultVolume)
 
   async function onSubmit(e: any) {
     e.preventDefault()
     try {
-      const response = await fetch('/muslim-api', {
-        method: 'POST',
+      delete value._id
+      const response = edit ? await fetch(`/muslim-api/${data.number}`, {
+        method: 'PUT',
         body: JSON.stringify(value)
-      });
+      }) : await fetch('/muslim-api', { method: 'POST', body: JSON.stringify(value) })
 
       if (response.ok) {
         console.log('Add successfully');
+        let previousChapter = {
+          chapter_id: value.chapter_id,
+          chapter_metadata: value.chapter_metadata,
+          chapter_name: value.chapter_name,
+          chapter_transliteration: value.chapter_transliteration,
+          chapter_title: value.chapter_title,
+        }
         // Handle success
-        setValue({ ...defaultValue, volume_id: newVolume.id, volume_title: { en: newVolume.title.en , ms: newVolume.title.ms, ar: newVolume.title.ar }})
-        setNewVolume(defaultVolume)
+        if (!edit) {
+          setValue({ ...defaultValue, content: [{ en: "", ms: "", ar: "" }], ...previousChapter, volume_id: newVolume.id, volume_title: { en: newVolume.title.en , ms: newVolume.title.ms, ar: newVolume.title.ar }})
+          setNewVolume(defaultVolume)
+        }
       } else {
         console.error('Error with file');
         // Handle error
@@ -130,7 +139,6 @@ export function MuslimForm({ data } : { data?: any }) {
         })
         console.log('Add successfully');
         // Handle success
-        setNewVolume(defaultVolume)
       } else {
         console.error('Error with file');
         // Handle error
@@ -141,6 +149,15 @@ export function MuslimForm({ data } : { data?: any }) {
     }
   }
 
+  const addNewHadith = (e) => {
+    e.preventDefault()
+    // Append a new content object to the content array
+    setValue(prevValue => ({
+      ...prevValue,
+      content: [...prevValue.content, { en: "", ms: "", ar: "" }]
+    }));
+  }
+
   return (
     <div className="grid grid-cols-2 gap-8">
       <div>
@@ -149,16 +166,34 @@ export function MuslimForm({ data } : { data?: any }) {
             <Label htmlFor="ar">Number</Label>
             <Input value={value.number} onChange={(e) => setValue({ ...value, number: e.target.value })}/>
           </div>
-          <div>
-            <Label htmlFor="ar">Arabic</Label>
-            <Textarea value={value.content.ar} onChange={(e) => setValue({ ...value, content: { ...value.content, ar: e.target.value } })}/>
-          </div>
-          <div>
-            <Label htmlFor="ms">Malay</Label>
-            <Textarea value={value.content.ms} onChange={(e) => setValue({ ...value, content: { ...value.content, ms: e.target.value } })}/>
-          </div>
+          {
+            value.content.map((contentItem, index) => (
+              <div key={index} className="space-y-8">
+                <div>
+                  <Label htmlFor="ar">Arabic</Label>
+                  <Textarea value={value.content[index].ar}
+                            onChange={(e) => {
+                              const updatedContent = [...value.content];
+                              updatedContent[index].ar = e.target.value;
+                              setValue(prevValue => ({ ...prevValue, content: updatedContent }));
+                            }}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="ms">Malay</Label>
+                  <Textarea value={value.content[index].ms}
+                            onChange={(e) => {
+                              const updatedContent = [...value.content];
+                              updatedContent[index].ms = e.target.value;
+                              setValue(prevValue => ({ ...prevValue, content: updatedContent }));
+                            }}
+                  />
+                </div>
+                <hr />
+              </div>
+          ))}
 
-          <Button onClick={() => setToggle(true)} size={'sm'}>+ Add hadith</Button>
+          <Button onClick={(e) => addNewHadith(e)} size={'sm'}>+ Add hadith</Button>
 
           {/*setValue({ ...value, volume_id: selectedVol.id, volume_title: { ...value.volume_title, ms: selectedVol.title.ms, ar: selectedVol.title.ar }})*/}
           {/*<Select onValueChange={(selectedVol) => onSelectChange(selectedVol)}>*/}
@@ -195,10 +230,10 @@ export function MuslimForm({ data } : { data?: any }) {
           <div className="space-y-4">
             <Label>Volume</Label>
             <p className="text-slate-500 text-xs">Volume here will get the previously entered volume</p>
-            <Input placeholder="Malay" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ms: e.target.value }})}/>
-            <Input placeholder="Arabic" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ar: e.target.value }})}/>
-            <Input placeholder="Transliteration" onChange={(e) => setNewVolume({ ...newVolume, transliteration: { ...newVolume.transliteration, ms: e.target.value }})}/>
-            <Textarea placeholder="Metadata" onChange={(e) => setNewVolume({ ...newVolume, metadata: e.target.value })}/>
+            <Input value={newVolume.title.ms} placeholder="Malay" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ms: e.target.value }})}/>
+            <Input value={newVolume.title.ar} placeholder="Arabic" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ar: e.target.value }})}/>
+            <Input value={newVolume.transliteration.ms} placeholder="Transliteration" onChange={(e) => setNewVolume({ ...newVolume, transliteration: { ...newVolume.transliteration, ms: e.target.value }})}/>
+            <Textarea value={newVolume.metadata} placeholder="Metadata" onChange={(e) => setNewVolume({ ...newVolume, metadata: e.target.value })}/>
             <Button className="" size={'sm'} variant={'outline'} onClick={submitNewVolume}>Add volume</Button>
           </div>
 
