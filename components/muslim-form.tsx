@@ -158,12 +158,12 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
     }));
   }
 
-  const removeHadith = (index) => {
+  const removeHadith = (index: any) => {
     // Filter out the content object at the given index
-    const updatedContent = value.content.filter((_, i) => i !== index);
+    const updatedContent = value.content.filter((_: any, i: any) => i !== index);
 
     // Update the state
-    setValue(prevValue => ({ ...prevValue, content: updatedContent }));
+    setValue((prevValue: any) => ({ ...prevValue, content: updatedContent }));
   }
 
   return (
