@@ -149,7 +149,7 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
     }
   }
 
-  const addNewHadith = (e) => {
+  const addNewHadith = (e: any) => {
     e.preventDefault()
     // Append a new content object to the content array
     setValue(prevValue => ({
