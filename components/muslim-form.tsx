@@ -229,7 +229,7 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
 
           <div className="space-y-4">
             <Label>Volume</Label>
-            <p className="text-slate-500 text-xs">Volume here will get the previously entered volume</p>
+            <p className="text-slate-500 text-xs">Volume here will get the previously entered volume. Make sure to click the add volume button for a new volume</p>
             <Input value={newVolume.title.ms} placeholder="Malay" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ms: e.target.value }})}/>
             <Input value={newVolume.title.ar} placeholder="Arabic" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ar: e.target.value }})}/>
             <Input value={newVolume.transliteration.ms} placeholder="Transliteration" onChange={(e) => setNewVolume({ ...newVolume, transliteration: { ...newVolume.transliteration, ms: e.target.value }})}/>
