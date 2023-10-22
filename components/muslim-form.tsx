@@ -158,6 +158,14 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
     }));
   }
 
+  const removeHadith = (index) => {
+    // Filter out the content object at the given index
+    const updatedContent = value.content.filter((_, i) => i !== index);
+
+    // Update the state
+    setValue(prevValue => ({ ...prevValue, content: updatedContent }));
+  }
+
   return (
     <div className="grid grid-cols-2 gap-8">
       <div>
@@ -189,11 +197,17 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
                             }}
                   />
                 </div>
-                <hr />
+                <div className="flex justify-end items-center">
+                  { index > 0 && <Button onClick={() => removeHadith(index)} size={'sm'} className="bg-red-500 text-white hover:bg-red-700">- Remove hadith</Button> }
+                </div>
+                <hr className="h-[2px] bg-gray-500"/>
               </div>
           ))}
 
-          <Button onClick={(e: any) => addNewHadith(e)} size={'sm'}>+ Add hadith</Button>
+          <div className="space-y-2">
+            <p className="text-slate-500 text-xs">This add hadith button will add a new set of inputs. This is for duplicate hadith numbers</p>
+            <Button onClick={(e: any) => addNewHadith(e)} size={'sm'}>+ Add hadith</Button>
+          </div>
 
           {/*setValue({ ...value, volume_id: selectedVol.id, volume_title: { ...value.volume_title, ms: selectedVol.title.ms, ar: selectedVol.title.ar }})*/}
           {/*<Select onValueChange={(selectedVol) => onSelectChange(selectedVol)}>*/}
@@ -229,7 +243,7 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
 
           <div className="space-y-4">
             <Label>Volume</Label>
-            <p className="text-slate-500 text-xs">Volume here will get the previously entered volume. Make sure to click the add volume button for a new volume</p>
+            <p className="text-slate-500 text-xs">Volume here will get the previously entered volume. <span className="font-bold text-red-400">Make sure to click the add volume button when adding a new volume</span></p>
             <Input value={newVolume.title.ms} placeholder="Malay" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ms: e.target.value }})}/>
             <Input value={newVolume.title.ar} placeholder="Arabic" onChange={(e) => setNewVolume({ ...newVolume, title: { ...newVolume.title, ar: e.target.value }})}/>
             <Input value={newVolume.transliteration.ms} placeholder="Transliteration" onChange={(e) => setNewVolume({ ...newVolume, transliteration: { ...newVolume.transliteration, ms: e.target.value }})}/>
