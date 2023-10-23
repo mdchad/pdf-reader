@@ -42,7 +42,7 @@ const defaultValue = {
   volume_title: {
     en: "",
     ms: "",
-    ar: "ِ"
+    ar: ""
   },
   book_id: "240360e4-50b4-47a9-9506-9850b0e3bfd7",
   book_name: "sahih_muslim",
@@ -72,6 +72,7 @@ const defaultVolume = {
 }
 
 export function MuslimForm({ data, volumeData, edit = false } : { data?: any, volumeData?: any, edit?: boolean }) {
+  console.log('oi',volumeData)
   const { toast } = useToast()
 
   const [value, setValue] = useState(data ? data : defaultValue)

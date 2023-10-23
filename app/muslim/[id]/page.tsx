@@ -8,7 +8,7 @@ import {useParams} from "next/navigation";
 
 export default function MuslimScreen() {
   const [fetchData, setFetchData] = useState()
-  const [volumeData, setVolumeData] = useState()
+  const [volumeData, setVolumeData] = useState(null)
   const params = useParams()
   const id = params.id
 
@@ -19,17 +19,19 @@ export default function MuslimScreen() {
       });
 
       const { data } = await res.json()
-      console.log(data.volume_id)
+      console.log('oiiii', data.volume_id)
       //
-      const response = await fetch(`/volume-muslim/${data.volume_id}`, {
-        method: 'GET',
-      });
 
-      const { data: volumeData } = await response.json()
+      if (data.volume_id) {
+        const response = await fetch(`/volume-muslim/${data.volume_id}`, {
+          method: 'GET',
+        });
 
+        const { data: volumeData } = await response.json()
+        setVolumeData(volumeData)
+      }
 
       setFetchData(data)
-      setVolumeData(volumeData)
     })()
   }, [])
 
@@ -63,7 +65,7 @@ export default function MuslimScreen() {
             <UserNav />
           </div>
         </div>
-        { fetchData && volumeData && <MuslimForm data={fetchData} volumeData={volumeData} edit={true}/> }
+        { fetchData && <MuslimForm data={fetchData} volumeData={volumeData} edit={true}/> }
       </div>
     </>
   )
