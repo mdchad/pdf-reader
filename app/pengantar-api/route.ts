@@ -1,15 +1,11 @@
 import {NextRequest, NextResponse} from "next/server";
-import {promises as fs} from "fs";
-import path from "path";
 import connectToDatabase from '@/lib/mongodb';
 import {ObjectId} from "mongodb";
-import {useParams} from "next/navigation";
 
-export async function GET(req: Request, { params } : { params: any}) {
+export async function GET(req: NextRequest) {
   const db = await connectToDatabase();
-  const number = Number(params.id)
 
-  const data = await db.collection('muslim').findOne({ number });
+  const data = await db.collection('Hadiths').find({ "volume_title.ms": "Pengantar" }).toArray();
 
   return NextResponse.json({
     success: true,
@@ -19,11 +15,12 @@ export async function GET(req: Request, { params } : { params: any}) {
 
 export async function PUT(req: Request, { params } : { params: any}) {
   const db = await connectToDatabase();
-  const number = params.id
 
   const res = await req.json();
+  const id = res._id
+  delete res._id
 
-  const data = await db.collection('muslim').updateOne({ number }, { $set: res });
+  const data = await db.collection('Hadiths').updateOne({_id: new ObjectId(id)}, { $set: res });
 
   return NextResponse.json({
     success: true,

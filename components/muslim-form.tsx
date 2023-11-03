@@ -72,7 +72,6 @@ const defaultVolume = {
 }
 
 export function MuslimForm({ data, volumeData, edit = false } : { data?: any, volumeData?: any, edit?: boolean }) {
-  console.log('oi',volumeData)
   const { toast } = useToast()
 
   const [value, setValue] = useState(data ? data : defaultValue)
@@ -80,6 +79,7 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
 
   async function onSubmit(e: any) {
     e.preventDefault()
+
     try {
       delete value._id
       const response = edit ? await fetch(`/muslim-api/${data.number}`, {

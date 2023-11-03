@@ -19,11 +19,10 @@ export default function MuslimScreen() {
       });
 
       const { data } = await res.json()
-      console.log('oiiii', data.volume_id)
       //
 
-      if (data.volume_id) {
-        const response = await fetch(`/volume-muslim/${data.volume_id}`, {
+      if (data?.volume_id) {
+        const response = await fetch(`/volume-muslim/${data?.volume_id}`, {
           method: 'GET',
         });
 
