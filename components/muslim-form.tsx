@@ -173,7 +173,7 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
         <form onSubmit={onSubmit} className="space-y-8">
           <div>
             <Label htmlFor="ar">Number</Label>
-            <Input value={value.number} onChange={(e) => setValue({ ...value, number: e.target.value })}/>
+            <Input value={value.number} type="number" onChange={(e) => setValue({ ...value, number: e.target.value })}/>
           </div>
           {
             value.content.map((contentItem: any, index: any) => (
