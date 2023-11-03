@@ -9,7 +9,7 @@ import {PengantarForm} from "@/components/pengantar-form";
 import {useRouter} from "next/navigation";
 
 export default function PengantarPage() {
-  const [fetchData, setFetchData] = useState(null)
+  const [fetchData, setFetchData] = useState([])
   const [value, setValue] = useState({})
   const [index, setIndex] = useState(null)
   const { toast } = useToast()
@@ -29,11 +29,11 @@ export default function PengantarPage() {
 
   }, [])
 
-  const handleChange = (id, val) => {
+  const handleChange = (id: any, val: any) => {
     setValue({ id, number: Number(val), volume_id: '2b1bc287-cdea-4e51-b5d3-f6fa0ce31235\n'})
   };
 
-  async function submitForm(e) {
+  async function submitForm(e: any) {
     e.preventDefault()
 
     try {
@@ -78,7 +78,7 @@ export default function PengantarPage() {
           </div>
         </div>
         {/*<Button>Next</Button>*/}
-        { fetchData && fetchData.map((data, i) => {
+        { fetchData.length && fetchData.map((data: any, i: any) => {
           return (
             <Button key={i}
                     onClick={() => {
