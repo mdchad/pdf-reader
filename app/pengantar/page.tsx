@@ -1,13 +1,10 @@
 'use client'
 
-import Image from "next/image"
 import { UserNav } from "@/components/user-nav"
-import {useEffect, useRef, useState} from "react";
-import {Input} from "@/components/ui/input";
+import {useEffect, useState} from "react";
 import * as React from "react";
 import {Button} from "@/components/ui/button";
-import {useToast} from "../../components/ui/use-toast";
-import {Textarea} from "@/components/ui/textarea";
+import {useToast} from "@/components/ui/use-toast";
 import {PengantarForm} from "@/components/pengantar-form";
 import {useRouter} from "next/navigation";
 
@@ -15,7 +12,6 @@ export default function PengantarPage() {
   const [fetchData, setFetchData] = useState(null)
   const [value, setValue] = useState({})
   const [index, setIndex] = useState(null)
-  const textareaRef = useRef(null);
   const { toast } = useToast()
   const router = useRouter();
 
@@ -31,25 +27,7 @@ export default function PengantarPage() {
       setFetchData(data)
     })()
 
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.addEventListener('input', autoResize);
-    }
-
-    return () => {
-      if (textarea) {
-        textarea.removeEventListener('input', autoResize);
-      }
-    };
   }, [])
-
-  const autoResize = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  };
 
   const handleChange = (id, val) => {
     setValue({ id, number: Number(val), volume_id: '2b1bc287-cdea-4e51-b5d3-f6fa0ce31235\n'})
