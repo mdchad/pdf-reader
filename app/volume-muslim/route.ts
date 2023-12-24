@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   const db = await connectToDatabase();
   const res = await req.json();
 
-  const data = await db.collection('muslim-volume').insertOne(res);
+  const data = await db.collection('muslimVolume').insertOne(res);
 
   return NextResponse.json({
     success: true,

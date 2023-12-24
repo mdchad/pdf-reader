@@ -79,36 +79,37 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
 
   async function onSubmit(e: any) {
     e.preventDefault()
+    console.log(value)
 
-    try {
-      delete value._id
-      const response = edit ? await fetch(`/muslim-api/${data.number}`, {
-        method: 'PUT',
-        body: JSON.stringify(value)
-      }) : await fetch('/muslim-api', { method: 'POST', body: JSON.stringify(value) })
-
-      if (response.ok) {
-        console.log('Add successfully');
-        let previousChapter = {
-          chapter_id: value.chapter_id,
-          chapter_metadata: value.chapter_metadata,
-          chapter_name: value.chapter_name,
-          chapter_transliteration: value.chapter_transliteration,
-          chapter_title: value.chapter_title,
-        }
-        // Handle success
-        if (!edit) {
-          setValue({ ...defaultValue, content: [{ en: "", ms: "", ar: "" }], ...previousChapter, volume_id: newVolume.id, volume_title: { en: newVolume.title.en , ms: newVolume.title.ms, ar: newVolume.title.ar }})
-          setNewVolume(defaultVolume)
-        }
-      } else {
-        console.error('Error with file');
-        // Handle error
-      }
-    } catch (error) {
-      console.error('Error file:', error);
-      // Handle error
-    }
+    // try {
+    //   delete value._id
+    //   const response = edit ? await fetch(`/muslim-api/${data.number}`, {
+    //     method: 'PUT',
+    //     body: JSON.stringify(value)
+    //   }) : await fetch('/muslim-api', { method: 'POST', body: JSON.stringify(value) })
+    //
+    //   if (response.ok) {
+    //     console.log('Add successfully');
+    //     let previousChapter = {
+    //       chapter_id: value.chapter_id,
+    //       chapter_metadata: value.chapter_metadata,
+    //       chapter_name: value.chapter_name,
+    //       chapter_transliteration: value.chapter_transliteration,
+    //       chapter_title: value.chapter_title,
+    //     }
+    //     // Handle success
+    //     if (!edit) {
+    //       setValue({ ...defaultValue, content: [{ en: "", ms: "", ar: "" }], ...previousChapter, volume_id: newVolume.id, volume_title: { en: newVolume.title.en , ms: newVolume.title.ms, ar: newVolume.title.ar }})
+    //       setNewVolume(defaultVolume)
+    //     }
+    //   } else {
+    //     console.error('Error with file');
+    //     // Handle error
+    //   }
+    // } catch (error) {
+    //   console.error('Error file:', error);
+    //   // Handle error
+    // }
     toast({
       title: "You submitted the following values:",
       description: (
@@ -173,7 +174,7 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
         <form onSubmit={onSubmit} className="space-y-8">
           <div>
             <Label htmlFor="ar">Number</Label>
-            <Input value={value.number} type="number" onChange={(e) => setValue({ ...value, number: e.target.value })}/>
+            <Input value={value.number} type="number" onChange={(e) => setValue({ ...value, number: e.target.value ? parseInt(e.target.value) : "" })}/>
           </div>
           {
             value.content.map((contentItem: any, index: any) => (
