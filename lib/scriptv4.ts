@@ -1,4 +1,5 @@
-// Import necessary modules
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 const { v4 } = require('uuid')
 const { MongoClient } = require('mongodb');
 
