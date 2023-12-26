@@ -48,12 +48,12 @@ async function connectToDatabase() {
 
 async function runScript() {
   const db = await connectToDatabase();
-  const collection = db.collection('Hadiths'); // Replace with your collection name
+  const collection = db.collection('muslim'); // Replace with your collection name
 
   let prevChapterTitle = null;
   let prevChapterId = null;
 
-  const cursor = collection.find();
+  const cursor = collection.find({ number: { $gte: 2131, $lte: 2159 }});
 
   try {
     while (await cursor.hasNext()) {

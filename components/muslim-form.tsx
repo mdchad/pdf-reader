@@ -181,6 +181,8 @@ export function MuslimForm({ data, volumeData, edit = false } : { data?: any, vo
                 <div>
                   <Label htmlFor="ar">Arabic</Label>
                   <Textarea value={value.content[index].ar}
+                            lang="ar"
+                            dir="rtl"
                             onChange={(e: any) => {
                               const updatedContent = [...value.content];
                               updatedContent[index].ar = e.target.value;
